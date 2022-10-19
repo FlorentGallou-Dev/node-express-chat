@@ -28,12 +28,14 @@ module.exports = function (app, server) {
     })
 
     io.on('connection', (socket) => {
+
         console.log(`Nouvel utilisateur ${socket.id}`);
+
+        socket.on('message-text', (msg) => {
+            socket.emit('message-text', msg);
+        });
     });
 
-    io.on('message-text', (msg) => {
-        console.log('ok message');
-    });
 
     // require('./socket/chat')(io);
 
