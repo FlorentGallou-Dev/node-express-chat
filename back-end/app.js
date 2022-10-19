@@ -22,16 +22,26 @@ module.exports = function (app, server) {
 
     const io = require('socket.io')(server, {
         cors: {
-            origin: "http://127.0.0.1:5000",
+            origin: "http://127.0.0.1:5500",
             methods: ["GET", "POST"]
         }
     })
 
-    require('./socket/chat')(io);
+    io.on('connection', (socket) => {
+        console.log(`Nouvel utilisateur ${socket.id}`);
+    });
+
+    io.on('message-text', (msg) => {
+        console.log('ok message');
+    });
+
+    // require('./socket/chat')(io);
 
     app.use(function (req, res, next) { req.io = io; next(); });
 
     app.get('/test', (req, res, next) => {
         res.status(200).json({ hello: 'world' })
     })
+
+
 }
